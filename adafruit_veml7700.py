@@ -98,7 +98,7 @@ class VEML7700:
 
     This example prints the ambient light data. Cover the sensor to see the values change.
 
-    ..code-block:: python
+    .. code-block:: python
 
         import time
         import board
@@ -119,7 +119,7 @@ class VEML7700:
 
     This example prints the white light data. Cover the sensor to see the values change.
 
-    ..code-block:: python
+    .. code-block:: python
 
         import time
         import board
@@ -145,7 +145,7 @@ class VEML7700:
 
     This example sets the ambient light gain to 2 and prints the ambient light sensor data.
 
-    ..code-block:: python
+    .. code-block:: python
 
         import time
         import board
@@ -169,7 +169,7 @@ class VEML7700:
     This example sets the ambient light integration time to 400ms and prints the ambient light
     sensor data.
 
-    ..code-block:: python
+    .. code-block:: python
 
         import time
         import board
@@ -231,7 +231,7 @@ class VEML7700:
 
         This example prints the light data in lux. Cover the sensor to see the values change.
 
-        ..code-block:: python
+        .. code-block:: python
 
             import time
             import board
