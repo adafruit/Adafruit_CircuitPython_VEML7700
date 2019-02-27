@@ -92,6 +92,7 @@ class VEML7700:
         ALS_800MS: 800
     }
 
+    # ALS - Ambient light sensor high resolution output data
     light = ROUnaryStruct(0x04, "<H")
     """Ambient light data.
 
@@ -111,6 +112,8 @@ class VEML7700:
             print("Ambient light:", veml7700.light)
             time.sleep(0.1)
     """
+
+    # WHITE - White channel output data
     white = ROUnaryStruct(0x05, "<H")
     """White light data.
 
@@ -130,12 +133,14 @@ class VEML7700:
             print("White light:", veml7700.white)
             time.sleep(0.1)
     """
+
+    # ALS_CONF_0 - ALS gain, integration time, interrupt and shutdown.
     light_shutdown = RWBit(0x00, 0, register_width=2)
     """Ambient light sensor shutdown. When ``True``, ambient light sensor is disabled."""
     light_interrupt = RWBit(0x00, 1, register_width=2)
     """Enable interrupt. ``True`` to enable, ``False`` to disable."""
     light_gain = RWBits(2, 0x00, 11, register_width=2)
-    """Ambient light gain setting. Gain settings are 2, 1, 1/4 and 1/8. Can be:
+    """Ambient light gain setting. Gain settings are 2, 1, 1/4 and 1/8. Settings options are:
     ALS_GAIN_2, ALS_GAIN_1, ALS_GAIN_1_4, ALS_GAIN_1_8.
 
     This example sets the ambient light gain to 2 and prints the ambient light sensor data.
@@ -182,10 +187,13 @@ class VEML7700:
 
     """
 
+    # ALS_WH - ALS high threshold window setting
     light_high_threshold = UnaryStruct(0x01, "<H")
     """Ambient light sensor interrupt high threshold setting."""
+    # ALS_WL - ALS low threshold window setting
     light_low_threshold = UnaryStruct(0x02, "<H")
     """Ambient light sensor interrupt low threshold setting."""
+    # ALS_INT - ALS INT trigger event
     light_interrupt_high = ROBit(0x06, 14, register_width=2)
     """Ambient light high threshold interrupt flag. Triggered when high threshold exceeded."""
     light_interrupt_low = ROBit(0x06, 15, register_width=2)
