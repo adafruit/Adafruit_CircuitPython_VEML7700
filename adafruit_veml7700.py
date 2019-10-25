@@ -67,12 +67,13 @@ class VEML7700:
     ALS_GAIN_1_4 = const(0x3)
 
     # Ambient light integration time settings
-    ALS_25MS = const(0x0)
-    ALS_50MS = const(0x1)
-    ALS_100MS = const(0x2)
-    ALS_200MS = const(0x3)
-    ALS_400MS = const(0x4)
-    ALS_800MS = const(0x5)
+
+    ALS_25MS = const(0xC)
+    ALS_50MS = const(0x8)
+    ALS_100MS = const(0x0)
+    ALS_200MS = const(0x1)
+    ALS_400MS = const(0x2)
+    ALS_800MS = const(0x3)
 
     # Gain value integers
     gain_values = {
