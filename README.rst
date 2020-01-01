@@ -9,8 +9,8 @@ Introduction
     :target: https://discord.gg/nBQh6qu
     :alt: Discord
 
-.. image:: https://travis-ci.com/adafruit/Adafruit_CircuitPython_VEML7700.svg?branch=master
-    :target: https://travis-ci.com/adafruit/Adafruit_CircuitPython_VEML7700
+.. image:: https://github.com/adafruit/Adafruit_CircuitPython_VEML7700/workflows/Build%20CI/badge.svg
+    :target: https://github.com/adafruit/Adafruit_CircuitPython_VEML7700/actions/
     :alt: Build Status
 
 CircuitPython driver for VEML7700 high precision I2C ambient light sensor.
