@@ -60,6 +60,7 @@ class VEML7700:
     :param busio.I2C i2c_bus: The I2C bus the VEML7700 is connected to.
 
     """
+
     # Ambient light sensor gain settings
     ALS_GAIN_1 = const(0x0)
     ALS_GAIN_2 = const(0x1)
@@ -80,7 +81,7 @@ class VEML7700:
         ALS_GAIN_2: 2,
         ALS_GAIN_1: 1,
         ALS_GAIN_1_4: 0.25,
-        ALS_GAIN_1_8: 0.125
+        ALS_GAIN_1_8: 0.125,
     }
 
     # Integration time value integers
@@ -90,7 +91,7 @@ class VEML7700:
         ALS_100MS: 100,
         ALS_200MS: 200,
         ALS_400MS: 400,
-        ALS_800MS: 800
+        ALS_800MS: 800,
     }
 
     # ALS - Ambient light sensor high resolution output data
@@ -221,10 +222,16 @@ class VEML7700:
         gain_max = 2
         integration_time_max = 800
 
-        if self.gain_value() == gain_max and self.integration_time_value() == integration_time_max:
+        if (
+            self.gain_value() == gain_max
+            and self.integration_time_value() == integration_time_max
+        ):
             return resolution_at_max
-        return resolution_at_max * (integration_time_max / self.integration_time_value()) * \
-               (gain_max / self.gain_value())
+        return (
+            resolution_at_max
+            * (integration_time_max / self.integration_time_value())
+            * (gain_max / self.gain_value())
+        )
 
     @property
     def lux(self):
