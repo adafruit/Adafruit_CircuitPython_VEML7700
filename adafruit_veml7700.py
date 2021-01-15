@@ -186,7 +186,15 @@ class VEML7700:
 
     def __init__(self, i2c_bus, address=0x10):
         self.i2c_device = i2cdevice.I2CDevice(i2c_bus, address)
-        self.light_shutdown = False  # Enable the ambient light sensor
+        for _ in range(3):
+            try:
+                self.light_shutdown = False  # Enable the ambient light sensor
+                break
+            except OSError:
+                pass
+        else:
+            raise RuntimeError("Unable to enable VEML7700 device")
+
 
     def integration_time_value(self):
         """Integration time value in integer form. Used for calculating ``resolution``."""
