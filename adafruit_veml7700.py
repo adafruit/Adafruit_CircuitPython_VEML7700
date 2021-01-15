@@ -195,7 +195,6 @@ class VEML7700:
         else:
             raise RuntimeError("Unable to enable VEML7700 device")
 
-
     def integration_time_value(self):
         """Integration time value in integer form. Used for calculating ``resolution``."""
         integration_time = self.light_integration_time
