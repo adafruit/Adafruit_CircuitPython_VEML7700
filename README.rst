@@ -55,14 +55,13 @@ To install in a virtual environment in your current project:
 Usage Example
 =============
 
-.. code-block:: python
+.. code-block:: python3
 
     import time
     import board
-    import busio
     import adafruit_veml7700
 
-    i2c = busio.I2C(board.SCL, board.SDA)
+    i2c = board.I2C()  # uses board.SCL and board.SDA
     veml7700 = adafruit_veml7700.VEML7700(i2c)
 
     while True:

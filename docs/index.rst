@@ -23,8 +23,12 @@ Table of Contents
 .. toctree::
     :caption: Tutorials
 
+    Adafruit VEML7700 Lux Sensor - I2C Light Sensor Learning Guide <https://learn.adafruit.com/adafruit-veml7700>
+
 .. toctree::
     :caption: Related Products
+
+    Adafruit VEML7700 Lux Sensor - I2C Light Sensor <https://www.adafruit.com/product/4162>
 
 
 .. toctree::
