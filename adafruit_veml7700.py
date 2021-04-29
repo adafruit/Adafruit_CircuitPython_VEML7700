@@ -16,15 +16,19 @@ Implementation Notes
 
 **Hardware:**
 
-* `Adafruit VEML7700 <https://www.adafruit.com/products>`_
+* `Adafruit VEML7700 Lux Sensor - I2C Light Sensor
+  <https://www.adafruit.com/product/4162>`_ (Product ID: 4162)
 
 **Software and Dependencies:**
 
 * Adafruit CircuitPython firmware for the supported boards:
-  https://github.com/adafruit/circuitpython/releases
+  https://circuitpython.org/downloads
 
-* Adafruit's Bus Device library: https://github.com/adafruit/Adafruit_CircuitPython_BusDevice
-* Adafruit's Register library: https://github.com/adafruit/Adafruit_CircuitPython_Register
+* Adafruit's Bus Device library:
+  https://github.com/adafruit/Adafruit_CircuitPython_BusDevice
+
+* Adafruit's Register library:
+  https://github.com/adafruit/Adafruit_CircuitPython_Register
 """
 
 from micropython import const
@@ -40,7 +44,8 @@ __repo__ = "https://github.com/adafruit/Adafruit_CircuitPython_VEML7700.git"
 class VEML7700:
     """Driver for the VEML7700 ambient light sensor.
 
-    :param busio.I2C i2c_bus: The I2C bus the VEML7700 is connected to.
+    :param ~busio.I2C i2c_bus: The I2C bus the device is connected to
+    :param int address: The I2C device address. Defaults to :const:`0x10`
 
     """
 
@@ -87,10 +92,9 @@ class VEML7700:
 
         import time
         import board
-        import busio
         import adafruit_veml7700
 
-        i2c = busio.I2C(board.SCL, board.SDA)
+        i2c = board.I2C()  # uses board.SCL and board.SDA
         veml7700 = adafruit_veml7700.VEML7700(i2c)
 
         while True:
@@ -108,10 +112,9 @@ class VEML7700:
 
         import time
         import board
-        import busio
         import adafruit_veml7700
 
-        i2c = busio.I2C(board.SCL, board.SDA)
+        i2c = board.I2C()  # uses board.SCL and board.SDA
         veml7700 = adafruit_veml7700.VEML7700(i2c)
 
         while True:
@@ -134,10 +137,9 @@ class VEML7700:
 
         import time
         import board
-        import busio
         import adafruit_veml7700
 
-        i2c = busio.I2C(board.SCL, board.SDA)
+        i2c = board.I2C()  # uses board.SCL and board.SDA
         veml7700 = adafruit_vcnl4040.VCNL4040(i2c)
 
         veml7700.light_gain = veml7700.ALS_GAIN_2
@@ -158,10 +160,9 @@ class VEML7700:
 
         import time
         import board
-        import busio
         import adafruit_veml7700
 
-        i2c = busio.I2C(board.SCL, board.SDA)
+        i2c = board.I2C()  # uses board.SCL and board.SDA
         veml7700 = adafruit_vcnl4040.VCNL4040(i2c)
 
         veml7700.light_integration_time = veml7700.ALS_400MS
@@ -196,18 +197,18 @@ class VEML7700:
             raise RuntimeError("Unable to enable VEML7700 device")
 
     def integration_time_value(self):
-        """Integration time value in integer form. Used for calculating ``resolution``."""
+        """Integration time value in integer form. Used for calculating :meth:`resolution`."""
         integration_time = self.light_integration_time
         return self.integration_time_values[integration_time]
 
     def gain_value(self):
-        """Gain value in integer form. Used for calculating ``resolution``."""
+        """Gain value in integer form. Used for calculating :meth:`resolution`."""
         gain = self.light_gain
         return self.gain_values[gain]
 
     def resolution(self):
-        """Calculate the ``resolution`` necessary to calculate lux. Based on integration time and
-        gain settings."""
+        """Calculate the :meth:`resolution`` necessary to calculate lux. Based on
+        integration time and gain settings."""
         resolution_at_max = 0.0036
         gain_max = 2
         integration_time_max = 800
@@ -233,10 +234,9 @@ class VEML7700:
 
             import time
             import board
-            import busio
             import adafruit_veml7700
 
-            i2c = busio.I2C(board.SCL, board.SDA)
+            i2c = board.I2C()  # uses board.SCL and board.SDA
             veml7700 = adafruit_veml7700.VEML7700(i2c)
 
             while True:
