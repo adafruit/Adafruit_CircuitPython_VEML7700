@@ -13,6 +13,10 @@ requires = [
 name = "adafruit-circuitpython-veml7700"
 description = "CircuitPython driver for VEML7700 high precision I2C ambient light sensor."
 readme = "README.rst"
+authors = [
+    {name = "Adafruit Industries", email = "circuitpython@adafruit.com"}
+]
+urls = {Homepage = "https://github.com/adafruit/Adafruit_CircuitPython_VEML7700"} 
 keywords = [
     "adafruit",
     "blinka",
