@@ -12,6 +12,7 @@ requires = [
 [project]
 name = "adafruit-circuitpython-veml7700"
 description = "CircuitPython driver for VEML7700 high precision I2C ambient light sensor."
+version = "0.0.0-auto.0"
 readme = "README.rst"
 authors = [
     {name = "Adafruit Industries", email = "circuitpython@adafruit.com"}
@@ -38,12 +39,10 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3",
 ]
-dynamic = ["version", "dependencies"]
+dynamic = ["dependencies"]
 
 [tool.setuptools]
 py-modules = ["adafruit_veml7700"]
 
 [tool.setuptools.dynamic]
 dependencies = {file = ["requirements.txt"]}
-
-[tool.setuptools_scm]
