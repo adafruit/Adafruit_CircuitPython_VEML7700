@@ -37,7 +37,7 @@ from adafruit_register.i2c_struct import UnaryStruct, ROUnaryStruct
 from adafruit_register.i2c_bits import RWBits
 from adafruit_register.i2c_bit import RWBit, ROBit
 
-__version__ = "0.0.0-auto.0"
+__version__ = "0.0.0+auto.0"
 __repo__ = "https://github.com/adafruit/Adafruit_CircuitPython_VEML7700.git"
 
 
