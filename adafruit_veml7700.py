@@ -37,6 +37,12 @@ from adafruit_register.i2c_struct import UnaryStruct, ROUnaryStruct
 from adafruit_register.i2c_bits import RWBits
 from adafruit_register.i2c_bit import RWBit, ROBit
 
+try:
+    import typing  # pylint: disable=unused-import
+    from busio import I2C
+except ImportError:
+    pass
+
 __version__ = "0.0.0+auto.0"
 __repo__ = "https://github.com/adafruit/Adafruit_CircuitPython_VEML7700.git"
 
@@ -185,7 +191,7 @@ class VEML7700:
     light_interrupt_low = ROBit(0x06, 15, register_width=2)
     """Ambient light low threshold interrupt flag. Triggered when low threshold exceeded."""
 
-    def __init__(self, i2c_bus, address=0x10):
+    def __init__(self, i2c_bus: I2C, address: int = 0x10) -> None:
         self.i2c_device = i2cdevice.I2CDevice(i2c_bus, address)
         for _ in range(3):
             try:
@@ -196,17 +202,17 @@ class VEML7700:
         else:
             raise RuntimeError("Unable to enable VEML7700 device")
 
-    def integration_time_value(self):
+    def integration_time_value(self) -> int:
         """Integration time value in integer form. Used for calculating :meth:`resolution`."""
         integration_time = self.light_integration_time
         return self.integration_time_values[integration_time]
 
-    def gain_value(self):
+    def gain_value(self) -> float:
         """Gain value in integer form. Used for calculating :meth:`resolution`."""
         gain = self.light_gain
         return self.gain_values[gain]
 
-    def resolution(self):
+    def resolution(self) -> float:
         """Calculate the :meth:`resolution`` necessary to calculate lux. Based on
         integration time and gain settings."""
         resolution_at_max = 0.0036
@@ -225,7 +231,7 @@ class VEML7700:
         )
 
     @property
-    def lux(self):
+    def lux(self) -> float:
         """Light value in lux.
 
         This example prints the light data in lux. Cover the sensor to see the values change.
