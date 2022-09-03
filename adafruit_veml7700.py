@@ -207,7 +207,7 @@ class VEML7700:
         integration_time = self.light_integration_time
         return self.integration_time_values[integration_time]
 
-    def gain_value(self) -> int:
+    def gain_value(self) -> float:
         """Gain value in integer form. Used for calculating :meth:`resolution`."""
         gain = self.light_gain
         return self.gain_values[gain]
