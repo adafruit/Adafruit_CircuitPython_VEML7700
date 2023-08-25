@@ -161,7 +161,7 @@ class VEML7700:
         import adafruit_veml7700
 
         i2c = board.I2C()  # uses board.SCL and board.SDA
-        veml7700 = adafruit_vcnl4040.VCNL4040(i2c)
+        veml7700 = adafruit_veml7700.VEML7700(i2c)
 
         veml7700.light_gain = veml7700.ALS_GAIN_2
 
@@ -184,7 +184,7 @@ class VEML7700:
         import adafruit_veml7700
 
         i2c = board.I2C()  # uses board.SCL and board.SDA
-        veml7700 = adafruit_vcnl4040.VCNL4040(i2c)
+        veml7700 = adafruit_veml7700.VEML7700(i2c)
 
         veml7700.light_integration_time = veml7700.ALS_400MS
 
