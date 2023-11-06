@@ -193,6 +193,8 @@ class VEML7700:
 
     def __init__(self, i2c_bus: I2C, address: int = 0x10) -> None:
         self.i2c_device = i2cdevice.I2CDevice(i2c_bus, address)
+        # Set lowest gain to keep from overflow on init if bright light
+        self.light_gain=self.ALS_GAIN_1_8
         for _ in range(3):
             try:
                 self.light_shutdown = False  # Enable the ambient light sensor
