@@ -196,7 +196,7 @@ class VEML7700:
         for _ in range(3):
             try:
                 # Set lowest gain to keep from overflow on init if bright light
-                self.light_gain=self.ALS_GAIN_1_8
+                self.light_gain = self.ALS_GAIN_1_8
                 #
                 self.light_shutdown = False  # Enable the ambient light sensor
                 break
