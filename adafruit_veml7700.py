@@ -33,9 +33,9 @@ Implementation Notes
 
 from micropython import const
 import adafruit_bus_device.i2c_device as i2cdevice
-from adafruit_register.i2c_struct import UnaryStruct, ROUnaryStruct
+from adafruit_register.i2c_struct import ROUnaryStruct
 from adafruit_register.i2c_bits import RWBits
-from adafruit_register.i2c_bit import RWBit, ROBit
+from adafruit_register.i2c_bit import RWBit
 
 try:
     import typing  # pylint: disable=unused-import
