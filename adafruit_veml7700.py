@@ -31,6 +31,8 @@ Implementation Notes
   https://github.com/adafruit/Adafruit_CircuitPython_Register
 """
 
+import time
+
 from micropython import const
 import adafruit_bus_device.i2c_device as i2cdevice
 from adafruit_register.i2c_struct import ROUnaryStruct
@@ -78,6 +80,9 @@ class VEML7700:
         ALS_GAIN_1_8: 0.125,
     }
 
+    # Convenience list of gains
+    gain_settings = [ALS_GAIN_1_8, ALS_GAIN_1_4, ALS_GAIN_1, ALS_GAIN_2]
+
     # Integration time value integers
     integration_time_values = {
         ALS_25MS: 25,
@@ -87,6 +92,16 @@ class VEML7700:
         ALS_400MS: 400,
         ALS_800MS: 800,
     }
+
+    # Convenience list of integration times
+    integration_time_settings = [
+        ALS_25MS,
+        ALS_50MS,
+        ALS_100MS,
+        ALS_200MS,
+        ALS_400MS,
+        ALS_800MS,
+    ]
 
     # ALS - Ambient light sensor high resolution output data
     light = ROUnaryStruct(0x04, "<H")
@@ -144,7 +159,7 @@ class VEML7700:
         import adafruit_veml7700
 
         i2c = board.I2C()  # uses board.SCL and board.SDA
-        veml7700 = adafruit_vcnl4040.VCNL4040(i2c)
+        veml7700 = adafruit_veml7700.VEML7700(i2c)
 
         veml7700.light_gain = veml7700.ALS_GAIN_2
 
@@ -167,7 +182,7 @@ class VEML7700:
         import adafruit_veml7700
 
         i2c = board.I2C()  # uses board.SCL and board.SDA
-        veml7700 = adafruit_vcnl4040.VCNL4040(i2c)
+        veml7700 = adafruit_veml7700.VEML7700(i2c)
 
         veml7700.light_integration_time = veml7700.ALS_400MS
 
@@ -190,6 +205,33 @@ class VEML7700:
                 pass
         else:
             raise RuntimeError("Unable to enable VEML7700 device")
+
+        self.last_read = self.milliseconds()
+
+    @staticmethod
+    def milliseconds() -> float:
+        """The time in milliseconds.
+
+        :return: The current time.
+        :rtype: float
+        """
+        return time.monotonic() * 1000
+
+    def compute_lux(self, als: int, use_correction: bool) -> float:
+        """Compute lux, possibly using non-linear correction.
+
+        :param int als: The ambient light level.
+        :param bool use_correction: Flag for applying the non-linear correction.
+
+        :return: The calculated lux.
+        :rtype: float
+        """
+        lux = self.resolution() * als
+        if use_correction:
+            lux = (
+                ((6.0135e-13 * lux - 9.3924e-9) * lux + 8.1488e-5) * lux + 1.0023
+            ) * lux
+        return lux
 
     def integration_time_value(self) -> int:
         """Integration time value in integer form. Used for calculating :meth:`resolution`."""
@@ -239,3 +281,77 @@ class VEML7700:
                 time.sleep(0.1)
         """
         return self.resolution() * self.light
+
+    @property
+    def autolux(self) -> float:
+        """Light value in lux using auto checks and correction.
+
+        This property uses auto gain and auto integration time adjustments as well
+        as a non-linear correction if necessary.
+
+        .. code-block:: python
+
+            import time
+            import board
+            import adafruit_veml7700
+
+            i2c = board.I2C()  # uses board.SCL and board.SDA
+            veml7700 = adafruit_veml7700.VEML7700(i2c)
+
+            while True:
+                print("Lux:", veml7700.autolux)
+                veml7700.wait_autolux(0.1)
+        """
+        gain_index = 0
+        it_index = 2
+        use_correction = False
+
+        self.gain_settings.index(self.light_gain)
+        self.integration_time_settings.index(self.light_integration_time)
+
+        als = self._read_als_wait()
+
+        if als <= 100:
+            while als <= 100 and not (gain_index == 3 and it_index == 5):
+                if gain_index < 3:
+                    gain_index += 1
+                    self.light_gain = self.gain_settings[gain_index]
+                elif it_index < 5:
+                    it_index += 1
+                    self.light_integration_time = self.integration_time_settings[
+                        it_index
+                    ]
+                als = self._read_als_wait()
+        else:
+            use_correction = True
+            while als > 10000 and it_index > 0:
+                it_index -= 1
+                self.light_integration_time = self.integration_time_settings[it_index]
+                als = self._read_als_wait()
+
+        return self.compute_lux(als, use_correction)
+
+    def _read_als_wait(self) -> float:
+        """Read ambient light level, but wait on the integration time.
+
+        :return: The ambient light level value.
+        :rtype: float
+        """
+        time_to_wait = 2 * self.integration_time_value()
+        time_waited = self.milliseconds() - self.last_read
+        if time_waited < time_to_wait:
+            time.sleep((time_to_wait - time_waited) / 1000)
+        self.last_read = self.milliseconds()
+        return self.light
+
+    def wait_autolux(self, wait_time: float) -> None:
+        """Wait minimum time between autolux measurements.
+
+        Ensure that the shortest wait time cannot be below the current
+        integration time setting.
+
+        :param float wait_time: The requested time between measurements (seconds).
+        """
+        minimum_wait_time = self.integration_time_value() / 1000
+        actual_wait_time = max(minimum_wait_time, wait_time)
+        time.sleep(actual_wait_time)
