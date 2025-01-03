@@ -12,6 +12,6 @@ DisplayIO Simpletest
 
 This is a simple test for boards with built-in display.
 
-.. literalinclude:: ../examples/veml7700_simpletest.py
-    :caption: examples/veml7700_simpletest.py
+.. literalinclude:: ../examples/veml7700_displayio_simpletest.py
+    :caption: examples/veml7700_displayio_simpletest.py
     :linenos:
