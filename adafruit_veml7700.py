@@ -246,7 +246,7 @@ class VEML7700:
     def resolution(self) -> float:
         """Calculate the :meth:`resolution`` necessary to calculate lux. Based on
         integration time and gain settings."""
-        resolution_at_max = 0.0036
+        resolution_at_max = 0.0042
         gain_max = 2
         integration_time_max = 800
 
