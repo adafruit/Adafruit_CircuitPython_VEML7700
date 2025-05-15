@@ -33,14 +33,15 @@ Implementation Notes
 
 import time
 
-from micropython import const
 import adafruit_bus_device.i2c_device as i2cdevice
-from adafruit_register.i2c_struct import ROUnaryStruct
-from adafruit_register.i2c_bits import RWBits
 from adafruit_register.i2c_bit import RWBit
+from adafruit_register.i2c_bits import RWBits
+from adafruit_register.i2c_struct import ROUnaryStruct
+from micropython import const
 
 try:
-    import typing  # pylint: disable=unused-import
+    import typing
+
     from busio import I2C
 except ImportError:
     pass
@@ -198,7 +199,6 @@ class VEML7700:
             try:
                 # Set lowest gain to keep from overflow on init if bright light
                 self.light_gain = self.ALS_GAIN_1_8
-                #
                 self.light_shutdown = False  # Enable the ambient light sensor
                 break
             except OSError:
@@ -228,9 +228,7 @@ class VEML7700:
         """
         lux = self.resolution() * als
         if use_correction:
-            lux = (
-                ((6.0135e-13 * lux - 9.3924e-9) * lux + 8.1488e-5) * lux + 1.0023
-            ) * lux
+            lux = (((6.0135e-13 * lux - 9.3924e-9) * lux + 8.1488e-5) * lux + 1.0023) * lux
         return lux
 
     def integration_time_value(self) -> int:
@@ -250,10 +248,7 @@ class VEML7700:
         gain_max = 2
         integration_time_max = 800
 
-        if (
-            self.gain_value() == gain_max
-            and self.integration_time_value() == integration_time_max
-        ):
+        if self.gain_value() == gain_max and self.integration_time_value() == integration_time_max:
             return resolution_at_max
         return (
             resolution_at_max
@@ -318,9 +313,7 @@ class VEML7700:
                     self.light_gain = self.gain_settings[gain_index]
                 elif it_index < 5:
                     it_index += 1
-                    self.light_integration_time = self.integration_time_settings[
-                        it_index
-                    ]
+                    self.light_integration_time = self.integration_time_settings[it_index]
                 als = self._read_als_wait()
         else:
             use_correction = True
