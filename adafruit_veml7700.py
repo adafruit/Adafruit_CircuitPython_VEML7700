@@ -212,8 +212,8 @@ class VEML7700:
 
     # Power saving register
     light_psm = RWBits(2, 0x03, 1, register_width=2)
-    """Power saving mode setting. Power saving settings are 500, 1000, 2000, 4000 ms. Settings options are:
-    PSM_500, PSM_1000, PSM_2000, PSM_4000"""
+    """Power saving mode setting. Power saving settings are 500, 1000, 2000, 4000 ms.
+    Settings options are: PSM_500, PSM_1000, PSM_2000, PSM_4000"""
     light_psm_en = RWBit(0x03, 0, register_width=2)
     """Power saving mode enable setting. When ``True``, power saving mode is enabled."""
 
