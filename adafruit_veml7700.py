@@ -104,6 +104,23 @@ class VEML7700:
         ALS_800MS,
     ]
 
+    # Power saving mode settings
+    PSM_500 = const(0x0)
+    PSM_1000 = const(0x1)
+    PSM_2000 = const(0x2)
+    PSM_4000 = const(0x3)
+
+    # Power saving mode value integers
+    psm_values = {
+        PSM_500: 500,
+        PSM_1000: 1000,
+        PSM_2000: 2000,
+        PSM_4000: 4000,
+    }
+
+    # Convenience list of power saving mode settings
+    psm_settings = [PSM_500, PSM_1000, PSM_2000, PSM_4000]
+
     # ALS - Ambient light sensor high resolution output data
     light = ROUnaryStruct(0x04, "<H")
     """Ambient light data.
@@ -192,6 +209,13 @@ class VEML7700:
             time.sleep(0.1)
 
     """
+
+    # Power saving register
+    light_psm = RWBits(2, 0x03, 1, register_width=2)
+    """Power saving mode setting. Power saving settings are 500, 1000, 2000, 4000 ms. Settings options are:
+    PSM_500, PSM_1000, PSM_2000, PSM_4000"""
+    light_psm_en = RWBit(0x03, 0, register_width=2)
+    """Power saving mode enable setting. When ``True``, power saving mode is enabled."""
 
     def __init__(self, i2c_bus: I2C, address: int = 0x10) -> None:
         self.i2c_device = i2cdevice.I2CDevice(i2c_bus, address)
@@ -348,3 +372,8 @@ class VEML7700:
         minimum_wait_time = self.integration_time_value() / 1000
         actual_wait_time = max(minimum_wait_time, wait_time)
         time.sleep(actual_wait_time)
+
+    def psm_value(self) -> float:
+        """Power saving mode value in integer form. Used for calculating refresh time."""
+        psm = self.light_psm
+        return self.psm_values[psm]
