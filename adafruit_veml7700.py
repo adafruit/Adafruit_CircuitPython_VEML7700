@@ -34,9 +34,9 @@ Implementation Notes
 import time
 
 import adafruit_bus_device.i2c_device as i2cdevice
-from adafruit_register.i2c_bit import RWBit
+from adafruit_register.i2c_bit import RWBit, ROBit
 from adafruit_register.i2c_bits import RWBits
-from adafruit_register.i2c_struct import ROUnaryStruct
+from adafruit_register.i2c_struct import UnaryStruct, ROUnaryStruct
 from micropython import const
 
 try:
@@ -144,9 +144,11 @@ class VEML7700:
             time.sleep(0.1)
     """
 
-    # ALS_CONF_0 - ALS gain, integration time, shutdown.
+    # ALS_CONF_0 - ALS gain, integration time, interrupt, and shutdown.
     light_shutdown = RWBit(0x00, 0, register_width=2)
     """Ambient light sensor shutdown. When ``True``, ambient light sensor is disabled."""
+    light_interrupt = RWBit(0x00, 1, register_width=2)
+    """Enable interrupt. ``True`` to enable, ``False`` to disable."""
     light_gain = RWBits(2, 0x00, 11, register_width=2)
     """Ambient light gain setting. Gain settings are 2, 1, 1/4 and 1/8. Settings options are:
     ALS_GAIN_2, ALS_GAIN_1, ALS_GAIN_1_4, ALS_GAIN_1_8.
@@ -192,6 +194,18 @@ class VEML7700:
             time.sleep(0.1)
 
     """
+
+   # ALS_WH - ALS high threshold window setting
+    light_high_threshold = UnaryStruct(0x01, "<H")
+    """Ambient light sensor interrupt high threshold setting."""
+    # ALS_WL - ALS low threshold window setting
+    light_low_threshold = UnaryStruct(0x02, "<H")
+    """Ambient light sensor interrupt low threshold setting."""
+    # ALS_INT - ALS INT trigger event
+    light_interrupt_high = ROBit(0x06, 14, register_width=2)
+    """Ambient light high threshold interrupt flag. Triggered when high threshold exceeded."""
+    light_interrupt_low = ROBit(0x06, 15, register_width=2)
+    """Ambient light low threshold interrupt flag. Triggered when low threshold exceeded."""
 
     def __init__(self, i2c_bus: I2C, address: int = 0x10) -> None:
         self.i2c_device = i2cdevice.I2CDevice(i2c_bus, address)
