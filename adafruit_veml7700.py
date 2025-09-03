@@ -195,7 +195,7 @@ class VEML7700:
 
     """
 
-   # ALS_WH - ALS high threshold window setting
+    # ALS_WH - ALS high threshold window setting
     light_high_threshold = UnaryStruct(0x01, "<H")
     """Ambient light sensor interrupt high threshold setting."""
     # ALS_WL - ALS low threshold window setting
