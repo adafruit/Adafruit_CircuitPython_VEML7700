@@ -387,7 +387,8 @@ class VEML7700:
         actual_wait_time = max(minimum_wait_time, wait_time)
         time.sleep(actual_wait_time)
 
-    def psm_value(self) -> float:
+    @property
+    def psm_value(self) -> int:
         """Power saving mode value in integer form. Used for calculating refresh time."""
         psm = self.light_psm
         return self.psm_values[psm]
